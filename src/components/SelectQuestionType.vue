@@ -14,10 +14,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import useSchemaStore from '@/stores/schema'
-const schemaStore = useSchemaStore()
+import useCustomSchema from '@/composibles/useCustomSchema';
+const {updateRow} = useCustomSchema()
 const selected = ref('text')
-const { index,secIndex } = defineProps(['index','secIndex'])
+const { index , secIndex } = defineProps(['index','secIndex'])
 watch(selected, (value) => {
-  schemaStore.schema[secIndex][index].type = value
+  updateRow(secIndex,index,{type:value})
 })
 </script>

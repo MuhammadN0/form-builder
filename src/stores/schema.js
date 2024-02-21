@@ -8,7 +8,8 @@ export default defineStore('schema', {
         {
           type: 'heading',
           value: '',
-          model: ''
+          model: '',
+          id: Date.now().toString()
         }
       ]
     ],
@@ -16,7 +17,13 @@ export default defineStore('schema', {
   }),
   actions: {
     addNewRow() {
-      this.schema[this.currentArray].push({ type: 'text', value: '', model: '', required: false })
+      this.schema[this.currentArray].push({
+        type: 'text',
+        value: '',
+        model: '',
+        required: false,
+        id: Date.now().toString()
+      })
     },
     updateRow(_currentArray, index, data) {
       this.schema[_currentArray][index] = {
@@ -26,7 +33,7 @@ export default defineStore('schema', {
       }
     },
     addNewHeading() {
-      this.schema[this.currentArray].push({ type: 'heading', value: '', model: '' })
+      this.schema[this.currentArray].push({ type: 'heading', value: '', model: '', id: Date.now().toString() })
     },
     addNewSection() {
       this.currentArray++
@@ -47,14 +54,17 @@ export default defineStore('schema', {
         }
       }
     },
+    updateSchema(_schema){
+      this.schema = _schema
+    },
     getSchemaWizardSchema() {
       this.schemaWizardSchema = this.schema.map((section) => {
         return section.map((question) => {
-          if(question.type === 'heading'){
+          if (question.type === 'heading') {
             return {
               heading: question.value,
               desc: question.desc,
-              component: 'FormHeading',
+              component: 'FormHeading'
             }
           } else if (question.type === 'mcq') {
             return {

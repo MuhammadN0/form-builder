@@ -3,7 +3,7 @@
     <input
       type="text"
       class="border rounded border-slate-800"
-      placeholder="Enter your question"
+      placeholder="Enter your mcq question"
       @input="handleChangeQuestion"
     />
     <div v-for="(answer, ind) in answers" :key="ind" class="flex gap-3">
@@ -28,12 +28,13 @@
 <script setup>
 import { ref, watch } from 'vue'
 import useSchemaStore from '@/stores/schema'
-const schemaStore = useSchemaStore()
+import useCustomSchema from '@/composibles/useCustomSchema';
+const {updateRow} = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
 const answers = ref([{}])
 function handleChangeQuestion(e) {
   const model = e.target.value.toLowerCase().split(' ').join('-')
-  schemaStore.updateRow(secIndex, index, {
+  updateRow(secIndex, index, {
     value: e.target.value,
     model
   })
@@ -47,6 +48,6 @@ function handleCorrectAnswer($event, ind) {
   answers.value[ind].isCorrect = $event.target.checked
 }
 watch(answers.value, (val) => {
-  schemaStore.updateRow(secIndex, index, { answers: val })
+  updateRow(secIndex, index, { answers: val })
 })
 </script>

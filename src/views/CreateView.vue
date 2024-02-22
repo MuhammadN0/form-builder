@@ -4,9 +4,8 @@
     <div class="flex gap-2">
       <div>
         <!-- V-for -->
-
         <div class="section py-5" v-for="(section, i) in schema" :key="i">
-          <draggable v-model="schema[i]" group="questions" item-key="id" @end="_updateSchema">
+          <draggable v-model="schema[i]"  item-key="id" :group="'section'+i" @end="_updateSchema">
             <template #item="{ index }">
               <div :key="index">
                 <CreatedRow :index="index" :secIndex="i" :key="i+'+'+index" />
@@ -63,10 +62,9 @@ const { schema, addNewHeading, addNewRow, addNewSection, getSchemaWizardSchema, 
   useCustomSchema()
 function _updateSchema(e) {
   console.log(schema.value);
-  updateRow(0,0,{})
 }
 function handlePreview() {
   getSchemaWizardSchema()
-  router.push({ name: 'preview' })
+  router.push({name:'preview'})
 }
 </script>

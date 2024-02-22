@@ -38,9 +38,8 @@
 import SelectQuestionType from './SelectQuestionType.vue'
 import CreatedShortAnswer from './CreatedShortAnswer.vue'
 import CreatedMultipleChoice from './CreatedMultipleChoice.vue'
-import useSchemaStore from '@/stores/schema'
 import HeadingRow from './HeadingRow.vue'
-import { ref, watch, computed } from 'vue'
+import { ref, watch } from 'vue'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const {
   schema: { value: schema },

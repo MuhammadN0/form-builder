@@ -24,13 +24,13 @@
 </template>
 
 <script setup>
-import useSchemaStore from '@/stores/schema'
-const schemaStore = useSchemaStore()
+import useCustomSchema from '@/composibles/useCustomSchema'
+const { updateRow } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
 function handleUpdateDesc(e) {
-  schemaStore.updateRow(secIndex, index, { desc: e.target.value })
+  updateRow(secIndex, index, { desc: e.target.value })
 }
 function handleUpdateHeading(e) {
-  schemaStore.updateRow(secIndex, index, { value: e.target.value })
+  updateRow(secIndex, index, { value: e.target.value })
 }
 </script>

@@ -14,7 +14,7 @@ const schemaWizardSchema = ref([])
 const currentArray = ref(0)
 function addNewRow() {
   if (!schema.value[currentArray.value]) {
-    schema.value[currentArray.value] = [];
+    schema.value[currentArray.value] = []
   }
   schema.value[currentArray.value].push({
     type: 'text',
@@ -29,6 +29,12 @@ function updateRow(_currentArray, index, data) {
     ...schema.value[_currentArray][index],
     ...data,
     model: data.model ? data.model : schema.value[_currentArray][index].model
+  }
+  if (data?.type === 'mcq') {
+    schema.value[_currentArray][index] = {
+      ...schema.value[_currentArray][index],
+      answers: [{ isCorrect: false, value: '' }]
+    }
   }
 }
 function addNewHeading() {
@@ -63,6 +69,7 @@ function updateSchema(_schema) {
 }
 function getSchemaWizardSchema() {
   schemaWizardSchema.value = schema.value.map((section) => {
+    if (!section.length) return
     return section.map((question) => {
       if (question.type === 'heading') {
         return {
@@ -95,10 +102,12 @@ function getSchemaWizardSchema() {
       }
     })
   })
+  console.log(schemaWizardSchema.value)
 }
 export default function useCustomSchema() {
   return {
     schema,
+    schemaWizardSchema,
     updateSchema,
     getSchemaWizardSchema,
     removeLast,

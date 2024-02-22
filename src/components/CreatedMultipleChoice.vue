@@ -5,6 +5,7 @@
       class="border rounded border-slate-800"
       placeholder="Enter your mcq question"
       @input="handleChangeQuestion"
+      :value="schema[secIndex][index].label"
     />
     <div v-for="(answer, ind) in answers" :key="ind" class="flex gap-3">
       <input type="radio" disabled />
@@ -13,13 +14,14 @@
         class="border rounded border-slate-800"
         placeholder="Add your answer"
         @input="handleChangeAnswer($event, ind)"
+        :value="schema[secIndex][index].answers[ind].value"
       />
       <div>
         <input type="checkbox" value="1" @input="handleCorrectAnswer($event, ind)" />
         <label>Correct answer</label>
       </div>
     </div>
-    <button @click="answers.push({isCorrect:false})" class="bg-slate-400 rounded-full text-slate-50 px-2 py-1">
+    <button @click="answers.push({value:'',isCorrect:false})" class="bg-slate-400 rounded-full text-slate-50 px-2 py-1">
       Add another answer
     </button>
   </div>
@@ -27,15 +29,14 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import useSchemaStore from '@/stores/schema'
 import useCustomSchema from '@/composibles/useCustomSchema';
-const {updateRow} = useCustomSchema()
+const {updateRow,schema:{value:schema}} = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
 const answers = ref([{}])
 function handleChangeQuestion(e) {
   const model = e.target.value.toLowerCase().split(' ').join('-')
   updateRow(secIndex, index, {
-    value: e.target.value,
+    label: e.target.value,
     model
   })
 }

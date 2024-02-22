@@ -13,7 +13,6 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import useSchemaStore from '@/stores/schema'
 import useCustomSchema from '@/composibles/useCustomSchema';
 const {updateRow} = useCustomSchema()
 const selected = ref('text')

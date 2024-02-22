@@ -1,5 +1,5 @@
 <template>
-  <SchemaWizard :schema="schema" :step="step">
+  <SchemaWizard :schema="schemaWizardSchema" :step="step">
     <template v-slot:afterForm>
       <button v-if="step > 0" @click="step--">Back</button>
       <button v-if="step < 1" @click="step++">Next</button>
@@ -11,10 +11,9 @@
 <script setup>
 import { ref } from "vue";
 import { SchemaWizard, useSchemaForm } from "formvuelate";
-import useSchemaStore from '@/stores/schema'
-const schemaStore = useSchemaStore();
+import useCustomSchema from "@/composibles/useCustomSchema";
 const step = ref(0);
 const formModel = ref({});
 useSchemaForm(formModel)
-const schema = ref(schemaStore.schemaWizardSchema)
+const {schemaWizardSchema} = useCustomSchema()
 </script>

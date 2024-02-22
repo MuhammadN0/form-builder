@@ -12,7 +12,6 @@
 
 <script setup>
 import useCustomSchema from '@/composibles/useCustomSchema'
-import useSchemaStore from '@/stores/schema'
 const { updateRow, schema } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
 function handleChangeQuestion(e) {

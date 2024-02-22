@@ -3,17 +3,19 @@
     <input
       type="text"
       class="border rounded border-slate-800"
-      placeholder="Enter your short question"
+      placeholder="Enter your question"
+      v-model="question"
       @input="handleChangeQuestion"
-      :value="schema[secIndex][index].value"
     />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const { updateRow, schema } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
+const question = ref(schema.value[secIndex][index].value)
 function handleChangeQuestion(e) {
   const model = e.target.value.toLowerCase().split(' ').join('-')
   updateRow(secIndex, index, {

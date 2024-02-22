@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.section::after {
+  content: 'Drag and drop here';
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 10px;
+  left: 0;
+}
+
 @layer components {
-  .section:not(:first-of-type) {
-    @apply border-t-2 border-slate-800
+  .wrapper > div:not(:last-of-type) {
+    @apply flex flex-col gap-5 mb-4;
   }
 }

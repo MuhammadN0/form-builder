@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
 
 const schema = ref([
   [
@@ -10,7 +10,44 @@ const schema = ref([
     }
   ]
 ])
-const schemaWizardSchema = ref([])
+const schemaWizardSchema = computed(() => schema.value.map((section) => {
+  if (!section.length) return
+  return section.map((question) => {
+    if (question.type === 'heading') {
+      return {
+        value: question.value,
+        desc: question.desc,
+        model: question.value + question.desc,
+        component: 'FormHeading'
+      }
+    } else if (question.type === 'mcq') {
+      return {
+        component: 'FormMCQ',
+        label: question.label,
+        answers: question.answers,
+        model: question.model,
+        required: question.required,
+        id: question.id
+      }
+    } else if (question.type === 'textarea') {
+      return {
+        component: 'FormTextarea',
+        label: question.value,
+        model: question.model,
+        required: question.required,
+        id: question.id
+      }
+    } else {
+      return {
+        component: 'FormTextInput',
+        label: question.value,
+        model: question.model,
+        required: question.required,
+        id: question.id
+      }
+    }
+  })
+}))
 const currentArray = ref(0)
 function addNewRow() {
   if (!schema.value[currentArray.value]) {
@@ -46,6 +83,7 @@ function addNewHeading() {
   })
 }
 function addNewSection() {
+  if (!schema.value[currentArray.value]?.length) return
   currentArray.value++
   schema.value.push([])
 }
@@ -67,14 +105,23 @@ function removeLast() {
 function updateSchema(_schema) {
   schema.value = _schema
 }
+function removeWithIndex(secIndex, index) {
+  schema.value[secIndex].splice(index, 1)
+}
+function removeSection() {
+  schema.value.pop()
+  currentArray.value--
+}
+/*
 function getSchemaWizardSchema() {
   schemaWizardSchema.value = schema.value.map((section) => {
     if (!section.length) return
     return section.map((question) => {
       if (question.type === 'heading') {
         return {
-          heading: question.value,
+          value: question.value,
           desc: question.desc,
+          model: question.value + question.desc,
           component: 'FormHeading'
         }
       } else if (question.type === 'mcq') {
@@ -83,37 +130,42 @@ function getSchemaWizardSchema() {
           label: question.label,
           answers: question.answers,
           model: question.model,
-          required: question.required
+          required: question.required,
+          id: question.id
         }
       } else if (question.type === 'textarea') {
         return {
           component: 'FormTextarea',
           label: question.value,
           model: question.model,
-          required: question.required
+          required: question.required,
+          id: question.id
         }
       } else {
         return {
           component: 'FormTextInput',
           label: question.value,
           model: question.model,
-          required: question.required
+          required: question.required,
+          id: question.id
         }
       }
     })
   })
-  console.log(schemaWizardSchema.value)
 }
+*/
 export default function useCustomSchema() {
   return {
     schema,
     schemaWizardSchema,
     updateSchema,
-    getSchemaWizardSchema,
+    //getSchemaWizardSchema,
     removeLast,
     addNewRow,
     addNewHeading,
     addNewSection,
-    updateRow
+    updateRow,
+    removeWithIndex,
+    removeSection
   }
 }

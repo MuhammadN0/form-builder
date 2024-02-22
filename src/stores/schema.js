@@ -16,15 +16,6 @@ export default defineStore('schema', {
     schemaWizardSchema: []
   }),
   actions: {
-    addNewRow() {
-      this.schema[this.currentArray].push({
-        type: 'text',
-        value: '',
-        model: '',
-        required: false,
-        id: Date.now().toString()
-      })
-    },
     updateRow(_currentArray, index, data) {
       this.schema[_currentArray][index] = {
         ...this.schema[_currentArray][index],

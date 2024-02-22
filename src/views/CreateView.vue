@@ -1,47 +1,53 @@
 <template>
   <div class="bg-slate-200 flex flex-col items-center gap-10 min-h-dvh">
     <h2>Create your form with our service</h2>
-    <div class="flex gap-2">
-      <div>
-        <!-- V-for -->
-        <div class="section py-5" v-for="(section, i) in schema" :key="i">
-          <draggable v-model="schema[i]"  item-key="id" :group="'section'+i" @end="_updateSchema">
-            <template #item="{ index }">
-              <div :key="index">
-                <CreatedRow :index="index" :secIndex="i" :key="i+'+'+index" />
-                <!-- v-for="(item, index) in section" :key="i+'+'+index" -->
-              </div>
-            </template>
-          </draggable>
-        </div>
+    <div class="grid grid-cols-12 gap-20">
+      <div class="col-span-3 relative">
+        <draggable
+          v-model="questionModels"
+          :group="{ name: 'questions', pull: 'clone', put: false }"
+          item-key="id"
+          :clone="handleClone"
+          @change="log"
+          class="sticky top-2"
+        >
+          <template #item="{ element }">
+            <div class="p-10 bg-slate-50 rounded-xl m-auto flex mb-3 gap-4 items-start cursor-move">
+              {{ element.value }}
+            </div>
+          </template>
+        </draggable>
       </div>
-      <div
-        class="flex flex-col items-center gap-3 self-end bg-slate-100 rounded-full border p-2 border-slate-800"
-      >
-        <!-- Controls -->
+      <div class="flex gap-2 col-span-9">
+        <div>
+          <!-- V-for -->
+          <div
+            class="section py-5 border-4 border-dashed border-gray-800 rounded-lg relative pt-4 pb-12 px-4 mb-3"
+            v-for="(section, i) in schema"
+            :key="i"
+          >
+            <draggable v-model="schema[i]" item-key="id" group="questions" @change="log">
+              <template #item="{ index }">
+                <div :key="index" class="cursor-move">
+                  <CreatedRow :index="index" :secIndex="i" :key="i + '+' + index" />
+                  <!-- v-for="(item, index) in section" :key="i+'+'+index" -->
+                </div>
+              </template>
+            </draggable>
+          </div>
+        </div>
         <button
-          class="flex items-center justify-center aspect-square bg-gray-50 font-bold px-3 border border-gray-800 rounded-full"
-          @click="addNewRow"
-        >
-          +
-        </button>
-        <button
-          class="flex items-center justify-center aspect-square bg-gray-50 font-bold px-3 border border-gray-800 rounded-full"
-          @click="addNewHeading"
-        >
-          T
-        </button>
-        <button
-          class="flex items-center justify-center aspect-square bg-gray-50 font-bold px-3 border border-gray-800 rounded-full"
+          class="flex flex-col items-center gap-3 self-end bg-slate-100 rounded-full border p-2 border-slate-800"
           @click="addNewSection"
         >
-          S
+          New section
         </button>
         <button
-          class="flex items-center justify-center aspect-square bg-gray-50 font-bold px-3 border border-gray-800 rounded-full"
-          @click="removeLast"
+          v-if="schema.length > 1"
+          @click="removeSection"
+          class="flex flex-col items-center gap-3 self-end bg-slate-100 rounded-full border p-2 border-slate-800"
         >
-          -
+          Remove section
         </button>
       </div>
     </div>
@@ -58,13 +64,45 @@ import useCustomSchema from '@/composibles/useCustomSchema'
 import { useRouter } from 'vue-router'
 import draggable from 'vuedraggable'
 const router = useRouter()
-const { schema, addNewHeading, addNewRow, addNewSection, getSchemaWizardSchema, removeLast,updateRow } =
-  useCustomSchema()
-function _updateSchema(e) {
-  console.log(schema.value);
-}
+const { schema, removeSection, addNewSection } = useCustomSchema()
 function handlePreview() {
-  getSchemaWizardSchema()
-  router.push({name:'preview'})
+  //getSchemaWizardSchema()
+  router.push({ name: 'preview' })
+}
+const questionModels = ref([
+  { type: 'text', value: 'Text Input' },
+  { type: 'checkbox', value: 'CheckBoxes' },
+  { type: 'textarea', value: 'Long Text' },
+  { type: 'mcq', value: 'Multible choice' },
+  { type: 'heading', value: 'Heading' }
+])
+function handleClone(e) {
+  console.log('clone:', e)
+  return e.type === 'heading'
+    ? {
+        value: '',
+        desc: '',
+        type: 'heading',
+        id: Date.now()
+      }
+    : e.type === 'mcq'
+      ? {
+          type: e.type,
+          value: '',
+          required: false,
+          model: '',
+          id: Date.now(),
+          answers: [{ value: '', isCorrect: false }]
+        }
+      : {
+          type: e.type,
+          value: '',
+          required: false,
+          model: '',
+          id: Date.now()
+        }
+}
+function log(e) {
+  console.log(e)
 }
 </script>

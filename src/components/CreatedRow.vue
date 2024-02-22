@@ -15,7 +15,7 @@
         :index="index"
         :secIndex="secIndex"
       />
-      <SelectQuestionType :index="index" :secIndex="secIndex" />
+      <!-- <SelectQuestionType :index="index" :secIndex="secIndex" /> -->
       <div class="flex items-center gap-1">
         <input
           type="checkbox"
@@ -31,11 +31,17 @@
       :index="index"
       v-if="schema[secIndex][index]?.type === 'heading'"
     />
+    <button
+      @click="handleRemove"
+      class="justify-self-end bg-slate-500 text-slate-50 px-2 py-1 rounded-full"
+    >
+      Remove
+    </button>
   </div>
 </template>
 
 <script setup>
-import SelectQuestionType from './SelectQuestionType.vue'
+// import SelectQuestionType from './SelectQuestionType.vue'
 import CreatedShortAnswer from './CreatedShortAnswer.vue'
 import CreatedMultipleChoice from './CreatedMultipleChoice.vue'
 import HeadingRow from './HeadingRow.vue'
@@ -43,9 +49,13 @@ import { ref, watch } from 'vue'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const {
   schema: { value: schema },
-  updateRow
+  updateRow,
+  removeWithIndex
 } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
-const req = ref(false)
+const req = ref(schema[secIndex][index].required)
 watch(req, (v) => updateRow(secIndex, index, { required: v }))
+function handleRemove() {
+  removeWithIndex(secIndex, index)
+}
 </script>

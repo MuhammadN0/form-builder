@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-slate-50 rounded-lg p-4 grid grid-cols-3">
     <label>{{ label }}</label>
-    <textarea></textarea>
+    <textarea class="resize-none border border-slate-800 "></textarea>
   </div>
 </template>
 

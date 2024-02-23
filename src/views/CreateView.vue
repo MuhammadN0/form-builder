@@ -6,7 +6,7 @@
         <draggable
           v-model="questionModels"
           :group="{ name: 'questions', pull: 'clone', put: false }"
-          item-key="id"
+          item-key="type"
           :clone="handleClone"
           class="sticky top-2"
         >
@@ -28,7 +28,6 @@
               <template #item="{ index }">
                 <div :key="index" class="cursor-move">
                   <CreatedRow :index="index" :secIndex="i" :key="i + '+' + index" />
-                  <!-- v-for="(item, index) in section" :key="i+'+'+index" -->
                 </div>
               </template>
             </draggable>
@@ -64,7 +63,6 @@ import draggable from 'vuedraggable'
 const router = useRouter()
 const { schema, removeSection, addNewSection } = useCustomSchema()
 function handlePreview() {
-  //getSchemaWizardSchema()
   router.push({ name: 'preview' })
 }
 const questionModels = ref([

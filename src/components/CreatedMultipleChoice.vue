@@ -57,5 +57,5 @@ function handleCorrectAnswer($event, ind) {
 }
 watch(answers.value, (val) => {
   updateRow(secIndex, index, { answers: val })
-})
+});
 </script>

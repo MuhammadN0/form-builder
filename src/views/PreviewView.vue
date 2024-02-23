@@ -4,13 +4,13 @@
       <SchemaWizard
         class="wrapper"
         useCustomFormWrapper
-        :schema="schemaWizardSchema"
+        :schema="schema"
         :step="step"
         @submit="handleSubmit"
       >
         <template v-slot:afterForm>
           <div class="flex flex-row justify-end gap-4 items-center">
-            <template v-if="checkArrayHasElements(schemaWizardSchema)">
+            <template v-if="checkArrayHasElements(schema)">
               <button
                 class="rounded px-2 py-1 text-slate-800 border-2 border-slate-800"
                 v-if="step > 0"
@@ -20,7 +20,7 @@
               </button>
               <button
                 class="bg-slate-600 text-slate-50 rounded px-2 py-1"
-                v-if="step < schemaWizardSchema.length - 1"
+                v-if="step < schema.length - 1"
                 @click="step++"
               >
                 Next
@@ -29,7 +29,7 @@
             <button
               class="bg-slate-600 text-slate-50 rounded px-2 py-1"
               type="submit"
-              v-if="step === schemaWizardSchema.length - 1"
+              v-if="step === schema.length - 1"
             >
               Submit
             </button>
@@ -52,7 +52,7 @@ import useCustomSchema from '@/composibles/useCustomSchema'
 const step = ref(0)
 const formModel = ref({})
 useSchemaForm(formModel)
-const { schemaWizardSchema } = useCustomSchema()
+const { schema } = useCustomSchema()
 function handleSubmit(values) {
   console.log(values)
 }

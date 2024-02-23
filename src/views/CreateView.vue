@@ -8,25 +8,23 @@
           :group="{ name: 'questions', pull: 'clone', put: false }"
           item-key="id"
           :clone="handleClone"
-          @change="log"
           class="sticky top-2"
         >
           <template #item="{ element }">
             <div class="p-10 bg-slate-50 rounded-xl m-auto flex mb-3 gap-4 items-start cursor-move">
-              {{ element.value }}
+              {{ element.label }}
             </div>
           </template>
         </draggable>
       </div>
       <div class="flex gap-2 col-span-9">
         <div>
-          <!-- V-for -->
           <div
             class="section py-5 border-4 border-dashed border-gray-800 rounded-lg relative pt-4 pb-12 px-4 mb-3"
             v-for="(section, i) in schema"
             :key="i"
           >
-            <draggable v-model="schema[i]" item-key="id" group="questions" @change="log">
+            <draggable v-model="schema[i]" item-key="id" group="questions">
               <template #item="{ index }">
                 <div :key="index" class="cursor-move">
                   <CreatedRow :index="index" :secIndex="i" :key="i + '+' + index" />
@@ -70,39 +68,48 @@ function handlePreview() {
   router.push({ name: 'preview' })
 }
 const questionModels = ref([
-  { type: 'text', value: 'Text Input' },
-  { type: 'checkbox', value: 'CheckBoxes' },
-  { type: 'textarea', value: 'Long Text' },
-  { type: 'mcq', value: 'Multible choice' },
-  { type: 'heading', value: 'Heading' }
+  { type: 'text', label: 'Text Input' },
+  { type: 'checkbox', label: 'CheckBoxes' },
+  { type: 'textarea', label: 'Long Text' },
+  { type: 'mcq', label: 'Multible choice' },
+  { type: 'heading', label: 'Heading' }
 ])
 function handleClone(e) {
-  console.log('clone:', e)
   return e.type === 'heading'
     ? {
-        value: '',
+        component: 'FormHeading',
+        heading: '',
         desc: '',
+        model:'',
         type: 'heading',
         id: Date.now()
       }
     : e.type === 'mcq'
       ? {
+          component: 'FormMCQ',
           type: e.type,
-          value: '',
-          required: false,
+          label: '',
+          isRequired: false,
           model: '',
           id: Date.now(),
-          answers: [{ value: '', isCorrect: false }]
+          answers: [{ label: '', isCorrect: false }]
         }
-      : {
-          type: e.type,
-          value: '',
-          required: false,
-          model: '',
-          id: Date.now()
-        }
-}
-function log(e) {
-  console.log(e)
+      : e.type === 'text'
+        ? {
+            component: 'FormTextInput',
+            type: e.type,
+            label: '',
+            isRequired: false,
+            model: '',
+            id: Date.now()
+          }
+        : {
+            component: 'FormTextarea',
+            type: e.type,
+            label: '',
+            isRequired: false,
+            model: '',
+            id: Date.now()
+          }
 }
 </script>

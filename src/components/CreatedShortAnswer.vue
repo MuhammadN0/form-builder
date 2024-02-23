@@ -15,11 +15,11 @@ import { ref } from 'vue'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const { updateRow, schema } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
-const question = ref(schema.value[secIndex][index].value)
+const question = ref(schema.value[secIndex][index].label)
 function handleChangeQuestion(e) {
   const model = e.target.value.toLowerCase().split(' ').join('-')
   updateRow(secIndex, index, {
-    value: e.target.value,
+    label: e.target.value,
     model
   })
 }

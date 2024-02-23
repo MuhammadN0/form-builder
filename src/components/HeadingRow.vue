@@ -30,12 +30,12 @@ import { ref } from 'vue'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const { updateRow, schema } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
-const heading = ref(schema.value[secIndex][index].value)
+const heading = ref(schema.value[secIndex][index].heading)
 const desc = ref(schema.value[secIndex][index].desc)
 function handleUpdateDesc(e) {
   updateRow(secIndex, index, { desc: e.target.value })
 }
 function handleUpdateHeading(e) {
-  updateRow(secIndex, index, { value: e.target.value })
+  updateRow(secIndex, index, { heading: e.target.value })
 }
 </script>

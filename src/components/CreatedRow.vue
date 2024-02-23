@@ -1,31 +1,28 @@
 <template>
   <div class="p-10 bg-slate-50 rounded-xl m-auto flex mb-3 gap-4 items-start">
-    <template v-if="schema[secIndex][index].type !== 'heading'">
-      <CreatedShortAnswer
-        v-if="
-          schema[secIndex][index]?.type === 'textarea' ||
-          schema[secIndex][index]?.type === 'text' ||
-          schema[secIndex][index]?.type === 'date'
-        "
-        :index="index"
-        :secIndex="secIndex"
+    <CreatedShortAnswer
+      v-if="
+        schema[secIndex][index]?.type === 'textarea' ||
+        schema[secIndex][index]?.type === 'text' ||
+        schema[secIndex][index]?.type === 'date'
+      "
+      :index="index"
+      :secIndex="secIndex"
+    />
+    <CreatedMultipleChoice
+      v-if="schema[secIndex][index]?.type === 'mcq'"
+      :index="index"
+      :secIndex="secIndex"
+    />
+    <div v-if="schema[secIndex][index]?.type !== 'heading'" class="flex items-center gap-1">
+      <input
+        type="checkbox"
+        value="1"
+        :id="'required' + '-' + secIndex + '-' + index"
+        v-model="req"
       />
-      <CreatedMultipleChoice
-        v-if="schema[secIndex][index]?.type === 'mcq'"
-        :index="index"
-        :secIndex="secIndex"
-      />
-      <!-- <SelectQuestionType :index="index" :secIndex="secIndex" /> -->
-      <div class="flex items-center gap-1">
-        <input
-          type="checkbox"
-          value="1"
-          :id="'required' + '-' + secIndex + '-' + index"
-          v-model="req"
-        />
-        <label :for="'required' + '-' + secIndex + '-' + index">Required</label>
-      </div>
-    </template>
+      <label :for="'required' + '-' + secIndex + '-' + index">Required</label>
+    </div>
     <HeadingRow
       :secIndex="secIndex"
       :index="index"
@@ -53,8 +50,8 @@ const {
   removeWithIndex
 } = useCustomSchema()
 const { index, secIndex } = defineProps(['index', 'secIndex'])
-const req = ref(schema[secIndex][index].required)
-watch(req, (v) => updateRow(secIndex, index, { required: v }))
+const req = ref(schema[secIndex][index].isRequired)
+watch(req, (v) => updateRow(secIndex, index, { isRequired: v }))
 function handleRemove() {
   removeWithIndex(secIndex, index)
 }

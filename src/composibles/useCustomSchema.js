@@ -15,15 +15,15 @@ const schema = ref([
 
 const currentArray = ref(0)
 
-function updateRow(_currentArray, index, data) {
-  schema.value[_currentArray][index] = {
-    ...schema.value[_currentArray][index],
+function updateRow(secIndex, index, data) {
+  schema.value[secIndex][index] = {
+    ...schema.value[secIndex][index],
     ...data,
-    model: data.model ? data.model : schema.value[_currentArray][index].model
+    model: data.model ? data.model : schema.value[secIndex][index].model
   }
   if (data?.type === 'mcq') {
-    schema.value[_currentArray][index] = {
-      ...schema.value[_currentArray][index],
+    schema.value[secIndex][index] = {
+      ...schema.value[secIndex][index],
       answers: [{ isCorrect: false, value: '' }]
     }
   }

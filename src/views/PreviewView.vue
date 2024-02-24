@@ -41,6 +41,7 @@
       >Back to Edit</RouterLink
     >
   </div>
+  <div class="bg-red-300">{{ formModel }}</div>
 </template>
 
 <script setup>
@@ -50,10 +51,10 @@ import { Form } from 'vee-validate'
 import { checkArrayHasElements } from '@/helpers'
 import useCustomSchema from '@/composibles/useCustomSchema'
 const step = ref(0)
+const { schema } = useCustomSchema()
 const formModel = ref({})
 useSchemaForm(formModel)
-const { schema } = useCustomSchema()
-function handleSubmit(values) {
-  console.log(values)
+function handleSubmit() {
+  console.log(formModel.value)
 }
 </script>
